@@ -216,3 +216,109 @@ module.exports.stringfi_json=function (jsonObject)
 
 
 }
+module.exports.updatestringfi_json=function (jsonObject)
+{
+    try
+    {
+        var conkeys=Object.keys(jsonObject)  //extract all keys
+        var stringBuilder="{\n"
+        var len=conkeys.length
+        for(var i=0;i<conkeys.length;i++)
+        {
+
+            var keyvalue=jsonObject[conkeys[i]];
+            if(typeof jsonObject[conkeys[i]]==="string" && (conkeys[i].toLocaleLowerCase()!="type" && conkeys[i].toLocaleLowerCase()=="id"))
+            {
+                var Structured=JSON.stringify(jsonObject[conkeys[i]])
+                // Structured = Structured.replace(/"/g,'');
+                data="\""+conkeys[i]+"\""+":"+"{\n"+
+                    "\"type\":\"Text\","+
+                    "\"value\":"+"\""+jsonObject[conkeys[i]]+"\","+
+                    "\"metadata\": {}"+
+                    "\n}"
+                stringBuilder=stringBuilder+data
+
+            }
+            else if(typeof jsonObject[conkeys[i]]==="boolean")
+            {
+                var Structured=JSON.stringify(jsonObject[conkeys[i]])
+                // Structured = Structured.replace(/"/g,'');
+                data="\""+conkeys[i]+"\""+":"+"{\n"+
+                    "\"type\":\"Boolean\","+
+                    "\"value\":"+jsonObject[conkeys[i]]+","+
+                    "\"metadata\": {}"+
+                    "\n}"
+                stringBuilder=stringBuilder+data
+
+            }
+            else if(conkeys[i].toLocaleLowerCase()=="location")
+            {
+                if(typeof jsonObject['location']['coordinates'][0]=="string")
+                {
+                    var result=jsonObject['location']['coordinates'].map(Number);
+                    var location=JSON.stringify(result)
+                    data="\""+conkeys[i]+"\""+":"+"{\n"+
+                        "\"type\":"+"\"geo:json\","+
+                        "\"value\":"+
+                        "{"
+                        +"\"type\":"+"\"Point\","
+                        +"\"coordinates\":"+location+
+                        "},"+
+                        "\"metadata\":{}"
+                        +"\n}"
+                    stringBuilder=stringBuilder+data
+                }
+                else
+                {
+                    var len=jsonObject['location']['coordinates'];
+                    var locaArray=[];
+                    for(var loc in jsonObject['location']['coordinates'] )
+                    {
+
+                        var loc_number=(jsonObject['location']['coordinates'][loc]).map(Number);
+                        locaArray.push(loc_number)
+                    }
+                    var location=JSON.stringify(locaArray)
+                    data="\""+conkeys[i]+"\""+":"+"{\n"+
+                        "\"type\":"+"\"geo:json\","
+                        +"\"value\":"
+                        +"{"
+                        +"\"type\":"+"\"Point\","
+                        +"\"coordinates\":"+location
+                        +"},"
+                        +"\"metadata\":{}"
+                        +"\n}"
+                    stringBuilder=stringBuilder+data
+                }
+
+            }
+            else
+            {
+
+                var Structured=JSON.stringify(jsonObject[conkeys[i]])
+                // Structured = Structured.replace(/"/g,'');
+                data="\""+conkeys[i]+"\""+":"+"{\n"+
+                    "\"type\":\"StructuredValue\","+
+                    "\"value\":"+Structured+","+
+                    "\"metadata\": {}"+
+                    "\n}"
+                stringBuilder=stringBuilder+data
+            }
+            stringBuilder=stringBuilder+","
+
+
+
+        }
+        stringBuilder = stringBuilder.slice(0, -1);
+        stringBuilder=stringBuilder+"\n}"
+        return stringBuilder
+    }
+    catch (error)
+    {
+        console.log(error)
+    }
+
+    //console.log(stringBuilder)
+
+
+}

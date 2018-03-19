@@ -13,7 +13,7 @@ var notif=function (parentResourcePath)
     try {
         if (notificationContent && (notificationContent['net']==3 || notificationContent['net']==4))
         {
-            console.log("Notification =",notificationContent);
+            console.log("Notification =",JSON.stringify(notificationContent));
             var resourceName=getParentResourcePath(notificationContent['sur']);
             if (notificationContent['nev']['rep']['m2m:cnt'])   //Notif--New container have been created--Subscribe CNT--Make MQTT subscription
             {
@@ -38,43 +38,85 @@ var notif=function (parentResourcePath)
                 var subscriptionresourceName=resourceNameSplit[resourceNameSplit.length-1];
                 var prn=resourceNameSplit[3];
                 var parentResourcePath=getParentResourcePath(resourceName);
+                var cin;
+                if (subscriptionresourceName=="info")
+                    {
+                        var statusrootparent=parentResourcePath+'/status';
+                        console.log('statusrootparent=',statusrootparent);
+                        api.latestcin(statusrootparent,function (result)
+                        {
+                            var res=JSON.parse(result)
+                            if(res['m2m:cin'])
+                            {
 
-                var JSON_result=FWparser.stringfi_json(newcin['con']);
-                console.log(JSON_result)
-                api.UploadEntity(JSON_result,function (result) {
+                                    newcin['con']['status']=res['m2m:cin']['con']
+                                    cin=newcin;
+                                    var JSON_result=FWparser.stringfi_json(cin['con']);
+                                    console.log(JSON_result)
+                                    api.UploadEntity(JSON_result,function (result) {
+                                    if(result!='') {
+                                        var jsonresult = JSON.parse(result)
+                                        if (jsonresult["description"] == "Already Exists") {
+                                            var body = {};
+                                            var updateJSON_result = FWparser.updatestringfi_json(cin['con']);
+                                            body['json'] = updateJSON_result
+                                            body['id'] = cin['con']['id']
+                                            body['type'] = cin['con']['type']
+                                            api.UpdateEntity(body, function (response) {
 
-                    console.log(result)
-                })
+                                                console.log('Entity updated--', body)
+                                            })
+                                        }
 
-                // if(prn.toLowerCase()=="parkingspot")
-                // {
-                //     if (subscriptionresourceName=="info")
-                //     {
-                //         createDescription(newcin,prn,parentResourcePath);
-                //         var statusrootparent=parentResourcePath+'/status';
-                //         api.latestcin(statusrootparent,function (res)
-                //         {
-                //             if(res['m2m:cin'])
-                //             {
-                //                 createDescription(res['m2m:cin'],prn,parentResourcePath)
-                //             }
-                //         })
-                //     }
-                //     else if(subscriptionresourceName=="status")
-                //     {
-                //         createDescription(newcin,prn,parentResourcePath);
-                //         var inforootparent=parentResourcePath+'/info';
-                //         api.latestcin(inforootparent,function (res)
-                //         {
-                //             if(res['m2m:cin']!=undefined)
-                //             {
-                //                 var resm2mcin=JSON.parse(res['m2m:cin']['con']);
-                //                 res['m2m:cin']['con']=resm2mcin
-                //                 createDescription(res['m2m:cin'],prn,parentResourcePath);
-                //             }
-                //
-                //         })
-                //     }
+                                    }
+                                    console.log('Entity Created--',JSON_result)
+
+
+                                })
+                            }
+                        })
+                    }
+                else if(subscriptionresourceName=="status")
+                {
+                        //createDescription(newcin,prn,parentResourcePath);
+                        var inforootparent=parentResourcePath+'/info';
+                        api.latestcin(inforootparent,function (result)
+                        {
+                            var res=JSON.parse(result)
+                            if(res['m2m:cin']!=undefined)
+                            {
+
+                                res['m2m:cin']['con'] = JSON.parse( res['m2m:cin']['con'])
+                                res['m2m:cin']['con']['status']=newcin['con']
+                                cin=res['m2m:cin']
+                                var JSON_result=FWparser.stringfi_json(cin['con']);
+                                console.log(JSON_result)
+                                api.UploadEntity(JSON_result,function (result) {
+
+                                    if(result!='')
+                                    {
+                                        var jsonresult=JSON.parse(result)
+                                        if(jsonresult["description"]=="Already Exists")
+                                        {
+                                            var body={};
+                                            var updateJSON_result=FWparser.updatestringfi_json(cin['con']);
+                                            body['json']=updateJSON_result
+                                            body['id']=cin['con']['id']
+                                            body['type']=cin['con']['type']
+                                            api.UpdateEntity(body,function (response) {
+
+                                                console.log('Entity updated--',body)
+                                            })
+                                        }
+                                    }
+                                    console.log('Entity Created--',JSON_result)
+                                })
+
+                            }
+
+                        })
+                    }
+
                 // }
                 // else if(prn.toLowerCase()=="offstreetparking")
                 // {

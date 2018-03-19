@@ -327,6 +327,28 @@ module.exports.UploadEntity = function (body, callback)
         callback(body)
     });
 };
+module.exports.UpdateEntity = function (body, callback)
+{
+    var headers= {
+        'Accept': 'application/json',
+        'Content-Type':'application/json'
+    };
+    var id=body['id'];
+    var type=body['type'];
+    var json=body['json']
+    var request = require('request');
+    request({
+        headers: headers,
+        url:'http://'+cawserverIP+':'+cawserverPort+'/v2/entities/'+id+"/attrs?type="+type,
+        method:'PUT',
+        body: json
 
+    },function(error, response, body)
+    {
+        //var obj = body);
+        // console.log(response);
+        callback(body)
+    });
+};
 
 
