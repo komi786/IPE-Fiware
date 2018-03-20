@@ -121,6 +121,31 @@ module.exports.stringfi_json=function (jsonObject)
                 stringBuilder=stringBuilder+temporarystring
 
             }
+            else if(conkeys[i].toLocaleLowerCase()=="category")
+            {
+                if(typeof jsonObject[conkeys[i]]==="string")
+                {
+                    var Structured=JSON.stringify(jsonObject[conkeys[i]])
+                    // Structured = Structured.replace(/"/g,'');
+                    data="\""+conkeys[i]+"\""+":"+"{\n"+
+                        "\"type\":\"StructuredValue\","+
+                        "\"value\": ["+jsonObject[conkeys[i]]+"],"+
+                        "\"metadata\": {}"+
+                        "\n}"
+                    stringBuilder=stringBuilder+data
+                }
+                else
+                {
+                    var Structured=JSON.stringify(jsonObject[conkeys[i]])
+                    // Structured = Structured.replace(/"/g,'');
+                    data="\""+conkeys[i]+"\""+":"+"{\n"+
+                        "\"type\":\"StructuredValue\","+
+                        "\"value\":"+Structured+","+
+                        "\"metadata\": {}"+
+                        "\n}"
+                    stringBuilder=stringBuilder+data
+                }
+            }
             else if(typeof jsonObject[conkeys[i]]==="string")
             {
                 var Structured=JSON.stringify(jsonObject[conkeys[i]])
@@ -161,29 +186,7 @@ module.exports.stringfi_json=function (jsonObject)
                         "\"metadata\":{}"
                         +"\n}"
                     stringBuilder=stringBuilder+data
-                // }
-                // else
-                // {
-                //     var len=jsonObject['location']['coordinates'];
-                //     var locaArray=[];
-                //     for(var loc in jsonObject['location']['coordinates'] )
-                //     {
-                //
-                //         var loc_number=(jsonObject['location']['coordinates'][loc]).map(Number);
-                //         locaArray.push(loc_number)
-                //     }
-                //     var location=JSON.stringify(locaArray)
-                //     data="\""+conkeys[i]+"\""+":"+"{\n"+
-                //         "\"type\":"+"\"geo:json\","
-                //         +"\"value\":"
-                //         +"{"
-                //         +"\"type\":"+"\"Point\","
-                //         +"\"coordinates\":"+location
-                //         +"},"
-                //         +"\"metadata\":{}"
-                //         +"\n}"
-                //     stringBuilder=stringBuilder+data
-                // }
+
 
             }
             else
@@ -227,7 +230,7 @@ module.exports.updatestringfi_json=function (jsonObject)
         {
 
             var keyvalue=jsonObject[conkeys[i]];
-            if(typeof jsonObject[conkeys[i]]==="string" && (conkeys[i].toLocaleLowerCase()!="type" && conkeys[i].toLocaleLowerCase()=="id"))
+            if(typeof jsonObject[conkeys[i]]==="string" && (conkeys[i].toLocaleLowerCase()!="type" && conkeys[i].toLocaleLowerCase()=="id" && conkeys[i].toLocaleLowerCase()=="category"))
             {
                 var Structured=JSON.stringify(jsonObject[conkeys[i]])
                 // Structured = Structured.replace(/"/g,'');
@@ -238,6 +241,31 @@ module.exports.updatestringfi_json=function (jsonObject)
                     "\n}"
                 stringBuilder=stringBuilder+data
 
+            }
+            else if(conkeys[i].toLocaleLowerCase()=="category")
+            {
+                if(typeof jsonObject[conkeys[i]]==="string")
+                {
+                    var Structured=JSON.stringify(jsonObject[conkeys[i]])
+                    // Structured = Structured.replace(/"/g,'');
+                    data="\""+conkeys[i]+"\""+":"+"{\n"+
+                        "\"type\":\"StructuredValue\","+
+                        "\"value\": ["+jsonObject[conkeys[i]]+"],"+
+                        "\"metadata\": {}"+
+                        "\n}"
+                    stringBuilder=stringBuilder+data
+                }
+                else
+                {
+                    var Structured=JSON.stringify(jsonObject[conkeys[i]])
+                    // Structured = Structured.replace(/"/g,'');
+                    data="\""+conkeys[i]+"\""+":"+"{\n"+
+                        "\"type\":\"StructuredValue\","+
+                        "\"value\":"+Structured+","+
+                        "\"metadata\": {}"+
+                        "\n}"
+                    stringBuilder=stringBuilder+data
+                }
             }
             else if(typeof jsonObject[conkeys[i]]==="boolean")
             {
