@@ -45,7 +45,13 @@ var notif=function (parentResourcePath)
                         console.log('statusrootparent=',statusrootparent);
                         api.latestcin(statusrootparent,function (result)
                         {
-                            var res=JSON.parse(result)
+                            console.log("status result",result)
+                            var res
+                            try {
+                                res = JSON.parse(result);
+                            } catch (exception) {
+                                res = result
+                            }
                             if(res['m2m:cin'])
                             {
 
@@ -82,11 +88,17 @@ var notif=function (parentResourcePath)
                         var inforootparent=parentResourcePath+'/info';
                         api.latestcin(inforootparent,function (result)
                         {
-                            var res=JSON.parse(result)
+                            console.log("info result",result)
+                            var res;
+                            try {
+                                res = JSON.parse(result);
+                            } catch (exception) {
+                                res = result
+                            }
                             if(res['m2m:cin']!=undefined)
                             {
 
-                                res['m2m:cin']['con'] = JSON.parse( res['m2m:cin']['con'])
+                                // res['m2m:cin']['con'] = JSON.parse( res['m2m:cin']['con'])
                                 res['m2m:cin']['con']['status']=newcin['con']
                                 cin=res['m2m:cin']
                                 var JSON_result=FWparser.stringfi_json(cin['con']);

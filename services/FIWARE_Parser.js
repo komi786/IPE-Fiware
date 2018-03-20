@@ -147,8 +147,8 @@ module.exports.stringfi_json=function (jsonObject)
             }
             else if(conkeys[i].toLocaleLowerCase()=="location")
             {
-                if(typeof jsonObject['location']['coordinates'][0]=="string")
-                {
+                // if(typeof jsonObject['location']['coordinates'][0]=="string")
+                // {
                     var result=jsonObject['location']['coordinates'].map(Number);
                     var location=JSON.stringify(result)
                     data="\""+conkeys[i]+"\""+":"+"{\n"+
@@ -161,29 +161,29 @@ module.exports.stringfi_json=function (jsonObject)
                         "\"metadata\":{}"
                         +"\n}"
                     stringBuilder=stringBuilder+data
-                }
-                else
-                {
-                    var len=jsonObject['location']['coordinates'];
-                    var locaArray=[];
-                    for(var loc in jsonObject['location']['coordinates'] )
-                    {
-
-                        var loc_number=(jsonObject['location']['coordinates'][loc]).map(Number);
-                        locaArray.push(loc_number)
-                    }
-                    var location=JSON.stringify(locaArray)
-                    data="\""+conkeys[i]+"\""+":"+"{\n"+
-                        "\"type\":"+"\"geo:json\","
-                        +"\"value\":"
-                        +"{"
-                        +"\"type\":"+"\"Point\","
-                        +"\"coordinates\":"+location
-                        +"},"
-                        +"\"metadata\":{}"
-                        +"\n}"
-                    stringBuilder=stringBuilder+data
-                }
+                // }
+                // else
+                // {
+                //     var len=jsonObject['location']['coordinates'];
+                //     var locaArray=[];
+                //     for(var loc in jsonObject['location']['coordinates'] )
+                //     {
+                //
+                //         var loc_number=(jsonObject['location']['coordinates'][loc]).map(Number);
+                //         locaArray.push(loc_number)
+                //     }
+                //     var location=JSON.stringify(locaArray)
+                //     data="\""+conkeys[i]+"\""+":"+"{\n"+
+                //         "\"type\":"+"\"geo:json\","
+                //         +"\"value\":"
+                //         +"{"
+                //         +"\"type\":"+"\"Point\","
+                //         +"\"coordinates\":"+location
+                //         +"},"
+                //         +"\"metadata\":{}"
+                //         +"\n}"
+                //     stringBuilder=stringBuilder+data
+                // }
 
             }
             else
@@ -253,8 +253,8 @@ module.exports.updatestringfi_json=function (jsonObject)
             }
             else if(conkeys[i].toLocaleLowerCase()=="location")
             {
-                if(typeof jsonObject['location']['coordinates'][0]=="string")
-                {
+                // if(typeof jsonObject['location']['coordinates'][0]=="string")
+                // {
                     var result=jsonObject['location']['coordinates'].map(Number);
                     var location=JSON.stringify(result)
                     data="\""+conkeys[i]+"\""+":"+"{\n"+
@@ -267,29 +267,29 @@ module.exports.updatestringfi_json=function (jsonObject)
                         "\"metadata\":{}"
                         +"\n}"
                     stringBuilder=stringBuilder+data
-                }
-                else
-                {
-                    var len=jsonObject['location']['coordinates'];
-                    var locaArray=[];
-                    for(var loc in jsonObject['location']['coordinates'] )
-                    {
-
-                        var loc_number=(jsonObject['location']['coordinates'][loc]).map(Number);
-                        locaArray.push(loc_number)
-                    }
-                    var location=JSON.stringify(locaArray)
-                    data="\""+conkeys[i]+"\""+":"+"{\n"+
-                        "\"type\":"+"\"geo:json\","
-                        +"\"value\":"
-                        +"{"
-                        +"\"type\":"+"\"Point\","
-                        +"\"coordinates\":"+location
-                        +"},"
-                        +"\"metadata\":{}"
-                        +"\n}"
-                    stringBuilder=stringBuilder+data
-                }
+                // }
+                // else
+                // {
+                //     var len=jsonObject['location']['coordinates'];
+                //     var locaArray=[];
+                //     for(var loc in jsonObject['location']['coordinates'] )
+                //     {
+                //
+                //         var loc_number=(jsonObject['location']['coordinates'][loc]).map(Number);
+                //         locaArray.push(loc_number)
+                //     }
+                //     var location=JSON.stringify(locaArray)
+                //     data="\""+conkeys[i]+"\""+":"+"{\n"+
+                //         "\"type\":"+"\"geo:json\","
+                //         +"\"value\":"
+                //         +"{"
+                //         +"\"type\":"+"\"Point\","
+                //         +"\"coordinates\":"+location
+                //         +"},"
+                //         +"\"metadata\":{}"
+                //         +"\n}"
+                //     stringBuilder=stringBuilder+data
+                // }
 
             }
             else
