@@ -1,3 +1,3 @@
-# IoT_Fiware
+# IPE_Fiware
 
-Backend Api in Node.Js to Fetch data from IoT sensor and annotate in semantic Description
+Backend API act as proxy implemented in Node.Js to Fetch data from IoT sensor and annotate in semantic Description
